@@ -1,4 +1,4 @@
-local Library = loadstring(game:HttpGet("https://pastebin.com/raw/9BTqEikG", true))() 
+local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/Library-ui/refs/heads/main/Redzhubui"))()
 
  
 
