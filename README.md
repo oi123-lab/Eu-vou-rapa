@@ -393,4 +393,97 @@ end
 })
 
  
+-- Atualizando o Dropdown quando um jogador entra ou sai
+
+Players.PlayerAdded:Connect(onPlayerAdded)
+
+Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+task.delay(1, updateDropdown)
+
+ 
+
+local TweenService = game:GetService("TweenService")
+
+local Players = game:GetService("Players")
+
+local LocalPlayer = Players.LocalPlayer
+
+ 
+
+Tab2:AddButton({
+
+Name = "Goto",
+
+Callback = function()
+
+local success, err = pcall(function()
+
+local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+local hrp = character:FindFirstChild("HumanoidRootPart")
+
+ 
+
+if not hrp then return end
+
+ 
+
+local targetName = getgenv().Target
+
+if not targetName then
+
+warn("[GOTO] Nenhum alvo definido.")
+
+return
+
+end
+
+ 
+
+local targetPlayer = Players:FindFirstChild(targetName)
+
+if not targetPlayer or not targetPlayer.Character then
+
+warn("[GOTO] Alvo inválido ou não encontrado.")
+
+return
+
+end
+
+ 
+
+local targetHRP = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+if not targetHRP then
+
+warn("[GOTO] Alvo sem HumanoidRootPart.")
+
+return
+
+end
+
+ 
+
+-- Tween suave de teleporte
+
+local goal = {CFrame = targetHRP.CFrame + Vector3.new(0, 5, 0)}
+
+local tween = TweenService:Create(hrp, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), goal)
+
+tween:Play()
+
+end)
+
+ 
+
+if not success then
+
+warn("[GOTO] Erro ao tentar teleportar:", err)
+
+end
+
+end
+
+})
 
