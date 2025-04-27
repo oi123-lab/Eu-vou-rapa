@@ -1,13 +1,396 @@
-local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/Library-ui/refs/heads/main/Redzhubui"))()
-local Window = redzlib:MakeWindow({
-  Title = "Matrix Hub v0.1🎩 : By TEAM CARTOLA CENTER🎩",
-  SubTitle = "BROOKHAVEN",
-  SaveFolder = "testando | redz lib v5.lua"
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/9BTqEikG", true))() 
+
+ 
+
+local Window = Library:MakeWindow({ 
+
+Title = "MATRIX HUB V3.0 : BROOKHAVEN RP 🏡", 
+
+SubTitle = "Por : TEAMMATRIXCOMMUNITY", 
+
+SaveFolder = "Shnmaxhub Folder" 
+
+}) 
+
+ 
+
+Window:AddMinimizeButton({ 
+
+Button = { Image = "rbxassetid://122216401159246", BackgroundTransparency = 0 }, -- Coloque um ID válido 
+
+Corner = { CornerRadius = UDim.new(0, 10) } 
+
+}) 
+
+ 
+
+local Tab1 = Window:MakeTab({"Home", "rbxassetid://138700382840270"}) 
+
+ 
+
+local Section = Tab1:AddSection("Créditos: Shelby") 
+
+ 
+
+Tab1:AddParagraph({"🔧 Interface Reformulada: Nova estrutura visual com foco em eficiência e organização."}) 
+
+Tab1:AddParagraph({"⚙️ Funções Reestruturadas: Melhor desempenho e modularidade interna aplicadas."}) 
+
+Tab1:AddParagraph({"✅ Estabilidade Aprimorada: Menor chance de falhas e resposta mais rápida do sistema."}) 
+
+Tab1:AddParagraph({"🔒 Segurança Reforçada: Proteções adicionais aplicadas para usuários e dados."}) 
+
+Tab1:AddParagraph({"🧩 Integrações Futuras: Base pronta para receber sistemas exclusivos do SHNMAXHUB."}) 
+
+ 
+
+local playerName = game.Players.LocalPlayer.Name 
+
+Tab1:AddParagraph({"Olá, " .. playerName .. "! ✅ Seja bem-vindo ao SHNMAXHUB. Aproveite com responsabilidade e bom uso do sistema."})
+
+
+local Tab2 = Window:MakeTab({"Troll", "rbxassetid://10734934585"})
+
+ 
+
+local Section = Tab2:AddSection({"Aba Troll"})
+
+ 
+
+local Players = game:GetService("Players")
+
+local TweenService = game:GetService("TweenService")
+
+local LocalPlayer = Players.LocalPlayer
+
+local CurrentCamera = workspace.CurrentCamera
+
+local RunService = game:GetService("RunService")
+
+ 
+
+local viewEnabled = false
+
+local currentTarget = nil
+
+local characterAddedConn = nil
+
+local playerNames = {}
+
+ 
+
+-- Função para atualizar a lista de jogadores
+
+local function updateDropdown()
+
+playerNames = {}
+
+for _, player in ipairs(Players:GetPlayers()) do
+
+if player ~= LocalPlayer then
+
+table.insert(playerNames, player.Name)
+
+end
+
+end
+
+if Dropdown then
+
+Dropdown:Set(playerNames)
+
+end
+
+end
+
+ 
+
+-- Função para tratar a adição de novos jogadores
+
+local function onPlayerAdded(player)
+
+if player ~= LocalPlayer then
+
+table.insert(playerNames, player.Name)
+
+if Dropdown then
+
+Dropdown:Set(playerNames)
+
+end
+
+end
+
+end
+
+ 
+
+-- Função para tratar a remoção de jogadores
+
+local function onPlayerRemoving(player)
+
+for i, name in ipairs(playerNames) do
+
+if name == player.Name then
+
+table.remove(playerNames, i)
+
+break
+
+end
+
+end
+
+if Dropdown then
+
+Dropdown:Set(playerNames)
+
+end
+
+ 
+
+if currentTarget == player then
+
+stopViewing()
+
+end
+
+end
+
+ 
+
+-- Atualizando dropdown com lista de jogadores ao iniciar
+
+Players.PlayerAdded:Connect(onPlayerAdded)
+
+Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+task.delay(1, updateDropdown)
+
+ 
+
+-- Função para resetar a câmera do jogador local
+
+local function resetCamera()
+
+if LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() then
+
+CurrentCamera.CameraSubject = LocalPlayer.Character
+
+end
+
+end
+
+ 
+
+-- Função para fazer a transição da câmera para o alvo
+
+local function tweenToTargetPart(part)
+
+local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+local targetCFrame = part.CFrame + part.CFrame.LookVector * -10 + Vector3.new(0, 5, 0)
+
+local goal = {CFrame = CFrame.new(targetCFrame.Position, part.Position)}
+
+local tween = TweenService:Create(CurrentCamera, tweenInfo, goal)
+
+tween:Play()
+
+end
+
+ 
+
+-- Função para configurar a visualização do alvo
+
+function setViewTarget(targetName)
+
+local targetPlayer = Players:FindFirstChild(targetName)
+
+if not targetPlayer then
+
+warn("[VIEW] Jogador não encontrado: " .. targetName)
+
+return
+
+end
+
+ 
+
+currentTarget = targetPlayer
+
+ 
+
+-- Desconectar qualquer conexão anterior
+
+if characterAddedConn then
+
+characterAddedConn:Disconnect()
+
+end
+
+
+
+
+characterAddedConn = targetPlayer.CharacterAdded:Connect(function(char)
+
+task.wait(0.1)
+
+if viewEnabled and currentTarget == targetPlayer then
+
+local hrp = char:FindFirstChild("HumanoidRootPart")
+
+if hrp then
+
+tweenToTargetPart(hrp)
+
+end
+
+pcall(function()
+
+CurrentCamera.CameraSubject = char
+
+end)
+
+end
+
+end)
+
+ 
+
+-- Verificar o personagem já existente
+
+if targetPlayer.Character then
+
+local hrp = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+if hrp then
+
+tweenToTargetPart(hrp)
+
+end
+
+pcall(function()
+
+CurrentCamera.CameraSubject = targetPlayer.Character
+
+end)
+
+end
+
+end
+
+ 
+
+-- Função para parar a visualização
+
+function stopViewing()
+
+viewEnabled = false
+
+currentTarget = nil
+
+if characterAddedConn then
+
+characterAddedConn:Disconnect()
+
+characterAddedConn = nil
+
+end
+
+resetCamera()
+
+end
+
+ 
+
+-- Render loop para atualizar a visualização
+
+RunService.RenderStepped:Connect(function()
+
+if viewEnabled and currentTarget then
+
+if not currentTarget:IsDescendantOf(game) then
+
+stopViewing()
+
+return
+
+end
+
+if currentTarget.Character and CurrentCamera.CameraSubject ~= currentTarget.Character then
+
+pcall(function()
+
+CurrentCamera.CameraSubject = currentTarget.Character
+
+end)
+
+end
+
+end
+
+end)
+
+ 
+
+-- Adicionando o Dropdown para seleção de jogador
+
+Dropdown = Tab2:AddDropdown({
+
+Name = "Selecione o Jogador.",
+
+Options = playerNames,
+
+Default = {},
+
+MultiSelect = false,
+
+Callback = function(Value)
+
+if typeof(Value) == "string" and Players:FindFirstChild(Value) then
+
+getgenv().Target = Value
+
+if viewEnabled then
+
+setViewTarget(Value)
+
+end
+
+end
+
+end
+
 })
 
-Window:AddMinimizeButton({
-    Button = { Image = "rbxassetid://10747779791", BackgroundTransparency = 0 },
-    Corner = { CornerRadius = UDim.new(35, 1) },
+ 
+
+-- Toggle para ativar/desativar a visualização
+
+Tab2:AddToggle({
+
+Name = "View",
+
+Default = false,
+
+Callback = function(state)
+
+viewEnabled = state
+
+if state and getgenv().Target then
+
+setViewTarget(getgenv().Target)
+
+else
+
+stopViewing()
+
+end
+
+end
+
 })
 
--- VariÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡veis de controle local teleporting = false local flingEnabled = false local viewEnabled = false local selectedPlayer = nil local flingSpeed = 9000 -- Aumentando a velocidade para um Fling mais forte -- FunÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o para teleporte contÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­nuo local function startTeleport() teleporting = true while teleporting do task.wait(0.05) local targetCharacter = selectedPlayer.Character if not targetCharacter then teleporting = false OrionLib:MakeNotification({ Name = "Erro", Content = "Jogador invÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡lido ou nÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o carregado!", Time = 3 }) return end local targetHRP = targetCharacter:FindFirstChild("HumanoidRootPart") if not targetHRP then teleporting = false OrionLib:MakeNotification({ Name = "Erro", Content = "HumanoidRootPart nÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o encontrado!", Time = 3 }) return end -- Teleporte contÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­nuo game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = targetHRP.CFrame -- Aplica Fling mais forte se estiver ativado if flingEnabled then game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new( math.random(-flingSpeed, flingSpeed), flingSpeed * 2, -- Dando um impulso mais forte no eixo Y math.random(-flingSpeed, flingSpeed) ) game.Players.LocalPlayer.Character.HumanoidRootPart.RotVelocity = Vector3.new(flingSpeed * 1.5, flingSpeed * 1.5, flingSpeed * 1.5) -- Maior rotaÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o end end end -- FunÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o para parar o teleporte local function stopTeleport() teleporting = false end -- FunÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o para atualizar a lista de jogadores local function updatePlayerList() local playerNames = {} for _, player in ipairs(game.Players:GetPlayers()) do if player ~= game.Players.LocalPlayer then table.insert(playerNames, player.Name) end end return playerNames end -- FunÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o para ativar/desativar o View local function enableView(targetPlayer) if not targetPlayer or not targetPlayer.Character then return end local camera = workspace.CurrentCamera camera.CameraSubject = targetPlayer.Character:FindFirstChild("Humanoid") or targetPlayer.Character camera.CameraType = Enum.CameraType.Custom end local function disableView() local camera = workspace.CurrentCamera camera.CameraSubject = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") camera.CameraType = Enum.CameraType.Custom end -- Reconectar View apÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³s morte game.Players.LocalPlayer.CharacterAdded:Connect(function() if viewEnabled and selectedPlayer then enableView(selectedPlayer) end end) -- Criar a aba "Fling" local FlingTab = Window:MakeTab({ Name = "Flingar ", Icon = "rbxassetid://109334249980199", PremiumOnly = false }) -- Dropdown de SeleÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o de Jogador local dropdown = FlingTab:AddDropdown({ Name = "Selecionar Jogador", Default = "", Options = updatePlayerList(), Callback = function(value) selectedPlayer = game.Players:FindFirstChild(value) end }) -- Atualizar lista de jogadores FlingTab:AddButton({ Name = "Atualizar Lista de Jogadores", Callback = function() dropdown:Refresh(updatePlayerList(), true) OrionLib:MakeNotification({ Name = "Lista Atualizada", Content = "Jogadores atualizados com sucesso!", Time = 3 }) end }) -- Alternador para Iniciar/Parar o Fling FlingTab:AddToggle({ Name = "Iniciar Fling", Default = false, Callback = function(value) flingEnabled = value if flingEnabled then startTeleport() else stopTeleport() end end }) -- Alternador para Ativar/Desativar o View FlingTab:AddToggle({ Name = "View Jogador", Default = false, Callback = function(value) viewEnabled = value if viewEnabled then enableView(selectedPlayer) else disableView() end end }) local Tab = Window:MakeTab({ 	Name = "pegar sofa", 	Icon = "rbxassetid://4483345998", 	PremiumOnly = false }) --[[ Name = <string> - The name of the tab. Icon = <string> - The icon of the tab. PremiumOnly = <bool> - Makes the tab accessible to Sirus Premium users only. ]] Tab:AddButton({ 	Name = "sofÃƒÂ¡", 	Callback = function() 	local args = { [1] = "PickingTools", [2] = "Couch" } game:GetService("ReplicatedStorage").RE:FindFirstChild("1Too1l"):InvokeServer(unpack(args))
+ 
+
