@@ -6,7 +6,7 @@ local Window = Library:MakeWindow({
 
 Title = "MATRIX HUB V3.0 : BROOKHAVEN RP 🏡", 
 
-SubTitle = "Por : TEAMMATRIXCOMMUNITY", 
+SubTitle = "Por : TEAM MATRIX COMMUNITY", 
 
 SaveFolder = "Shnmaxhub Folder" 
 
