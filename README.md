@@ -1,489 +1,248 @@
-local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/Library-ui/refs/heads/main/Redzhubui"))()
+	-- Criando a GUI principal 
+
+local ScreenGui = Instance.new("ScreenGui") 
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") 
+
+ScreenGui.Enabled = false -- Inicialmente o Frame estarÃƒÆ’Ã‚Â¡ invisÃƒÆ’Ã‚Â­vel 
 
  
 
-local Window = Library:MakeWindow({ 
+-- Criando o frame 
 
-Title = "MATRIX HUB V3.0 : BROOKHAVEN RP 🏡", 
+local Frame = Instance.new("Frame") 
 
-SubTitle = "Por : TEAM MATRIX COMMUNITY", 
+Frame.Parent = ScreenGui 
 
-SaveFolder = "Shnmaxhub Folder" 
+Frame.Size = UDim2.new(0, 400, 0, 200) 
 
-}) 
+Frame.Position = UDim2.new(0.5, -200, 0.5, -100) 
 
- 
+Frame.AnchorPoint = Vector2.new(0.5, 0.5) 
 
-Window:AddMinimizeButton({ 
+Frame.BackgroundColor3 = Color3.new(0, 0, 0) 
 
-Button = { Image = "rbxassetid://122216401159246", BackgroundTransparency = 0 }, -- Coloque um ID válido 
+Frame.BackgroundTransparency = 0.3 
 
-Corner = { CornerRadius = UDim.new(0, 10) } 
-
-}) 
+Frame.BorderSizePixel = 0 
 
  
 
-local Tab1 = Window:MakeTab({"Home", "rbxassetid://138700382840270"}) 
+-- Adicionando cantos arredondados ao Frame 
+
+local UICornerFrame = Instance.new("UICorner") 
+
+UICornerFrame.Parent = Frame 
+
+UICornerFrame.CornerRadius = UDim.new(0, 15) 
 
  
 
-local Section = Tab1:AddSection("Créditos: Shelby") 
+-- Criando o texto explicativo 
+
+local Label = Instance.new("TextLabel") 
+
+Label.Parent = Frame 
+
+Label.Size = UDim2.new(1, 0, 0.4, 0) 
+
+Label.Position = UDim2.new(0, 0, 0, 0) 
+
+Label.Text = "Put in the ID of a sound to play" 
+
+Label.TextScaled = true 
+
+Label.TextColor3 = Color3.new(1, 1, 1) 
+
+Label.BackgroundTransparency = 1 
+
+Label.Font = Enum.Font.SciFi 
 
  
 
-Tab1:AddParagraph({"🔧 Interface Reformulada: Nova estrutura visual com foco em eficiência e organização."}) 
+-- Criando a TextBox 
 
-Tab1:AddParagraph({"⚙️ Funções Reestruturadas: Melhor desempenho e modularidade interna aplicadas."}) 
+local TextBox = Instance.new("TextBox") 
 
-Tab1:AddParagraph({"✅ Estabilidade Aprimorada: Menor chance de falhas e resposta mais rápida do sistema."}) 
+TextBox.Parent = Frame 
 
-Tab1:AddParagraph({"🔒 Segurança Reforçada: Proteções adicionais aplicadas para usuários e dados."}) 
+TextBox.Size = UDim2.new(0.8, 0, 0.2, 0) 
 
-Tab1:AddParagraph({"🧩 Integrações Futuras: Base pronta para receber sistemas exclusivos do SHNMAXHUB."}) 
+TextBox.Position = UDim2.new(0.1, 0, 0.5, 0) 
 
- 
+TextBox.PlaceholderText = "Enter ID" 
 
-local playerName = game.Players.LocalPlayer.Name 
+TextBox.Text = "" 
 
-Tab1:AddParagraph({"Olá, " .. playerName .. "! ✅ Seja bem-vindo ao SHNMAXHUB. Aproveite com responsabilidade e bom uso do sistema."})
+TextBox.TextScaled = true 
 
+TextBox.TextColor3 = Color3.new(1, 1, 1) 
 
-local Tab2 = Window:MakeTab({"Troll", "rbxassetid://10734934585"})
+TextBox.BackgroundColor3 = Color3.new(0, 0, 0) 
 
- 
+TextBox.Font = Enum.Font.SciFi 
 
-local Section = Tab2:AddSection({"Aba Troll"})
-
- 
-
-local Players = game:GetService("Players")
-
-local TweenService = game:GetService("TweenService")
-
-local LocalPlayer = Players.LocalPlayer
-
-local CurrentCamera = workspace.CurrentCamera
-
-local RunService = game:GetService("RunService")
+TextBox.BorderSizePixel = 0 
 
  
 
-local viewEnabled = false
+-- Adicionando cantos arredondados ÃƒÆ’ TextBox 
 
-local currentTarget = nil
+local UICornerTextBox = Instance.new("UICorner") 
 
-local characterAddedConn = nil
+UICornerTextBox.Parent = TextBox 
 
-local playerNames = {}
-
- 
-
--- Função para atualizar a lista de jogadores
-
-local function updateDropdown()
-
-playerNames = {}
-
-for _, player in ipairs(Players:GetPlayers()) do
-
-if player ~= LocalPlayer then
-
-table.insert(playerNames, player.Name)
-
-end
-
-end
-
-if Dropdown then
-
-Dropdown:Set(playerNames)
-
-end
-
-end
+UICornerTextBox.CornerRadius = UDim.new(0, 8) 
 
  
 
--- Função para tratar a adição de novos jogadores
+-- Criando o botÃƒÆ’Ã‚Â£o 
 
-local function onPlayerAdded(player)
+local Button = Instance.new("TextButton") 
 
-if player ~= LocalPlayer then
+Button.Parent = Frame 
 
-table.insert(playerNames, player.Name)
+Button.Size = UDim2.new(0.4, 0, 0.2, 0) 
 
-if Dropdown then
+Button.Position = UDim2.new(0.3, 0, 0.75, 0) 
 
-Dropdown:Set(playerNames)
+Button.Text = "Play" 
 
-end
+Button.TextScaled = true 
 
-end
+Button.TextColor3 = Color3.new(1, 1, 1) 
 
-end
+Button.BackgroundColor3 = Color3.new(0, 0, 0) 
 
- 
+Button.Font = Enum.Font.SciFi 
 
--- Função para tratar a remoção de jogadores
-
-local function onPlayerRemoving(player)
-
-for i, name in ipairs(playerNames) do
-
-if name == player.Name then
-
-table.remove(playerNames, i)
-
-break
-
-end
-
-end
-
-if Dropdown then
-
-Dropdown:Set(playerNames)
-
-end
+Button.BorderSizePixel = 0 
 
  
 
-if currentTarget == player then
+-- Adicionando cantos arredondados ao botÃƒÆ’Ã‚Â£o 
 
-stopViewing()
+local UICornerButton = Instance.new("UICorner") 
 
-end
+UICornerButton.Parent = Button 
 
-end
-
- 
-
--- Atualizando dropdown com lista de jogadores ao iniciar
-
-Players.PlayerAdded:Connect(onPlayerAdded)
-
-Players.PlayerRemoving:Connect(onPlayerRemoving)
-
-task.delay(1, updateDropdown)
+UICornerButton.CornerRadius = UDim.new(0, 8) 
 
  
 
--- Função para resetar a câmera do jogador local
+-- VariÃƒÆ’Ã‚Â¡vel para armazenar o som em reproduÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o 
 
-local function resetCamera()
-
-if LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() then
-
-CurrentCamera.CameraSubject = LocalPlayer.Character
-
-end
-
-end
+local currentSound 
 
  
 
--- Função para fazer a transição da câmera para o alvo
+-- FunÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o para tocar o som localmente 
 
-local function tweenToTargetPart(part)
+local function playSoundLocally(audioID) 
 
-local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+local character = game.Players.LocalPlayer.Character 
 
-local targetCFrame = part.CFrame + part.CFrame.LookVector * -10 + Vector3.new(0, 5, 0)
+if character and character:FindFirstChild("Head") then 
 
-local goal = {CFrame = CFrame.new(targetCFrame.Position, part.Position)}
+-- Verifica se jÃƒÆ’Ã‚Â¡ hÃƒÆ’Ã‚Â¡ um som sendo tocado e o interrompe 
 
-local tween = TweenService:Create(CurrentCamera, tweenInfo, goal)
+if currentSound then 
 
-tween:Play()
+currentSound:Stop() 
 
-end
+currentSound:Destroy() 
 
- 
+currentSound = nil 
 
--- Função para configurar a visualização do alvo
-
-function setViewTarget(targetName)
-
-local targetPlayer = Players:FindFirstChild(targetName)
-
-if not targetPlayer then
-
-warn("[VIEW] Jogador não encontrado: " .. targetName)
-
-return
-
-end
+end 
 
  
 
-currentTarget = targetPlayer
+-- Cria e toca um novo som 
+
+currentSound = Instance.new("Sound") 
+
+currentSound.Parent = character.Head 
+
+currentSound.SoundId = "rbxassetid://" .. audioID 
+
+currentSound.Volume = 1 
+
+currentSound:Play() 
 
  
 
--- Desconectar qualquer conexão anterior
+-- Parar o som apÃƒÆ’Ã‚Â³s 3 segundos 
 
-if characterAddedConn then
+task.delay(3, function() 
 
-characterAddedConn:Disconnect()
+if currentSound then 
 
-end
+currentSound:Stop() 
 
+currentSound:Destroy() 
 
+currentSound = nil 
 
+end 
 
-characterAddedConn = targetPlayer.CharacterAdded:Connect(function(char)
-
-task.wait(0.1)
-
-if viewEnabled and currentTarget == targetPlayer then
-
-local hrp = char:FindFirstChild("HumanoidRootPart")
-
-if hrp then
-
-tweenToTargetPart(hrp)
-
-end
-
-pcall(function()
-
-CurrentCamera.CameraSubject = char
-
-end)
-
-end
-
-end)
+end) 
 
  
 
--- Verificar o personagem já existente
+currentSound.Ended:Connect(function() 
 
-if targetPlayer.Character then
+if currentSound then 
 
-local hrp = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+currentSound:Destroy() 
 
-if hrp then
+currentSound = nil 
 
-tweenToTargetPart(hrp)
+end 
 
-end
+end) 
 
-pcall(function()
+else 
 
-CurrentCamera.CameraSubject = targetPlayer.Character
+warn("NÃƒÆ’Ã‚Â£o foi possÃƒÆ’Ã‚Â­vel encontrar a cabeÃƒÆ’Ã‚Â§a do personagem para tocar o som!") 
 
-end)
+end 
 
-end
-
-end
+end 
 
  
 
--- Função para parar a visualização
+-- FunÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o para enviar o ÃƒÆ’Ã‚Â¡udio com o ID 
 
-function stopViewing()
+Button.MouseButton1Click:Connect(function() 
 
-viewEnabled = false
+local audioID = tonumber(TextBox.Text) 
 
-currentTarget = nil
+if audioID then 
 
-if characterAddedConn then
+-- Envia o som para o servidor 
 
-characterAddedConn:Disconnect()
+local args = { 
 
-characterAddedConn = nil
+[1] = game:GetService("Players").LocalPlayer.Character.Taser.Handle, 
 
-end
+[2] = audioID, 
 
-resetCamera()
+[3] = 0.95 
 
-end
+} 
 
- 
-
--- Render loop para atualizar a visualização
-
-RunService.RenderStepped:Connect(function()
-
-if viewEnabled and currentTarget then
-
-if not currentTarget:IsDescendantOf(game) then
-
-stopViewing()
-
-return
-
-end
-
-if currentTarget.Character and CurrentCamera.CameraSubject ~= currentTarget.Character then
-
-pcall(function()
-
-CurrentCamera.CameraSubject = currentTarget.Character
-
-end)
-
-end
-
-end
-
-end)
+game:GetService("ReplicatedStorage").RE:FindFirstChild("1Gu1nSound1s"):FireServer(unpack(args)) 
 
  
 
--- Adicionando o Dropdown para seleção de jogador
+-- Toca o som localmente 
 
-Dropdown = Tab2:AddDropdown({
+playSoundLocally(audioID) 
 
-Name = "Selecione o Jogador.",
+else 
 
-Options = playerNames,
-
-Default = {},
-
-MultiSelect = false,
-
-Callback = function(Value)
-
-if typeof(Value) == "string" and Players:FindFirstChild(Value) then
-
-getgenv().Target = Value
-
-if viewEnabled then
-
-setViewTarget(Value)
+warn("Por favor, insira um ID vÃƒÆ’Ã‚Â¡lido!") 
 
 end
-
-end
-
-end
-
-})
-
- 
-
--- Toggle para ativar/desativar a visualização
-
-Tab2:AddToggle({
-
-Name = "View",
-
-Default = false,
-
-Callback = function(state)
-
-viewEnabled = state
-
-if state and getgenv().Target then
-
-setViewTarget(getgenv().Target)
-
-else
-
-stopViewing()
-
-end
-
-end
-
-})
-
- 
--- Atualizando o Dropdown quando um jogador entra ou sai
-
-Players.PlayerAdded:Connect(onPlayerAdded)
-
-Players.PlayerRemoving:Connect(onPlayerRemoving)
-
-task.delay(1, updateDropdown)
-
- 
-
-local TweenService = game:GetService("TweenService")
-
-local Players = game:GetService("Players")
-
-local LocalPlayer = Players.LocalPlayer
-
- 
-
-Tab2:AddButton({
-
-Name = "Goto",
-
-Callback = function()
-
-local success, err = pcall(function()
-
-local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-
-local hrp = character:FindFirstChild("HumanoidRootPart")
-
- 
-
-if not hrp then return end
-
- 
-
-local targetName = getgenv().Target
-
-if not targetName then
-
-warn("[GOTO] Nenhum alvo definido.")
-
-return
-
-end
-
- 
-
-local targetPlayer = Players:FindFirstChild(targetName)
-
-if not targetPlayer or not targetPlayer.Character then
-
-warn("[GOTO] Alvo inválido ou não encontrado.")
-
-return
-
-end
-
- 
-
-local targetHRP = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
-
-if not targetHRP then
-
-warn("[GOTO] Alvo sem HumanoidRootPart.")
-
-return
-
-end
-
- 
-
--- Tween suave de teleporte
-
-local goal = {CFrame = targetHRP.CFrame + Vector3.new(0, 5, 0)}
-
-local tween = TweenService:Create(hrp, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), goal)
-
-tween:Play()
-
-end)
-
- 
-
-if not success then
-
-warn("[GOTO] Erro ao tentar teleportar:", err)
-
-end
-
-end
-
-})
 
