@@ -1,0 +1,185 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+-- Criar janela principal
+local Window = Fluent:CreateWindow({
+    Title = "MATRIX HUB V2.0",
+    SubTitle = "BY MATRIX COMMUNITY",
+    TabWidth = 120,
+    Size = UDim2.fromOffset(650, 500),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+
+-- Abas principais
+local Tabs = {
+    Main = Window:AddTab({ Title = "Principal", Icon = "home" }),
+    Farm = Window:AddTab({ Title = "Auto Farm", Icon = "activity" }),
+    Mastery = Window:AddTab({ Title = "Mastery", Icon = "award" }),
+    Fighting = Window:AddTab({ Title = "Estilos", Icon = "boxing" }),
+    Boss = Window:AddTab({ Title = "Bosses", Icon = "skull" }),
+    Money = Window:AddTab({ Title = "Dinheiro", Icon = "dollar-sign" }),
+    ESP = Window:AddTab({ Title = "Visual", Icon = "eye" }),
+    Player = Window:AddTab({ Title = "Jogador", Icon = "user" }),
+    Teleport = Window:AddTab({ Title = "Teleportes", Icon = "map-pin" })
+}
+
+-- Seção PRINCIPAL (todas opções básicas)
+Tabs.Main:AddParagraph("Bem-vindo ao MATRIX HUB O HUB FOI CRIADO PELO O DONO DA MATRIX(NOT LEGITTY)!")
+Tabs.Main:AddToggle("MainToggle", {
+    Title = "Ativar Tudo",
+    Default = false,
+    Callback = function(Value)
+        -- Ativar todas as funções principais
+        Fluent:Notify({
+            Title = "Sistema",
+            Content = Value and "Todas funções ativadas!" or "Funções desativadas",
+            Duration = 3
+        })
+    end
+})
+
+-- Seção AUTO FARM (opções detalhadas)
+local FarmSection = Tabs.Farm:AddSection("Configurações de Farm")
+
+FarmSection:AddToggle("AutoFarmToggle", {
+    Title = "Ativar Auto Farm",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoFarm = Value
+        Fluent:Notify({
+            Title = "Auto Farm",
+            Content = Value and "Ativado com sucesso!" or "Desativado",
+            Duration = 3
+        })
+    end
+})
+
+FarmSection:AddDropdown("FarmPriority", {
+    Title = "Prioridade de Farm",
+    Values = {"Mais Próximo", "Mais Fraco", "Mais Forte", "Mais XP"},
+    Default = "Mais Próximo",
+    Callback = function(Value)
+        getgenv().FarmPriority = Value
+    end
+})
+
+FarmSection:AddSlider("FarmDistance", {
+    Title = "Distância dos Mobs",
+    Min = 5,
+    Max = 50,
+    Default = 20,
+    Callback = function(Value)
+        getgenv().FarmDistance = Value
+    end
+})
+
+-- Seção MASTERY (todas opções visíveis)
+local MasterySection = Tabs.Mastery:AddSection("Auto Mastery")
+
+MasterySection:AddToggle("MasteryToggle", {
+    Title = "Ativar Auto Mastery",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoMastery = Value
+    end
+})
+
+MasterySection:AddToggle("SwordMastery", {
+    Title = "Mastery de Espadas",
+    Default = true,
+    Callback = function(Value)
+        getgenv().SwordMastery = Value
+    end
+})
+
+MasterySection:AddToggle("GunMastery", {
+    Title = "Mastery de Armas",
+    Default = true,
+    Callback = function(Value)
+        getgenv().GunMastery = Value
+    end
+})
+
+MasterySection:AddSlider("MasteryTarget", {
+    Title = "Nível Alvo",
+    Min = 1,
+    Max = 600,
+    Default = 600,
+    Callback = function(Value)
+        getgenv().MasteryTarget = Value
+    end
+})
+
+-- Seção ESTILOS DE LUTA (completa)
+local FightingSection = Tabs.Fighting:AddSection("Estilos de Luta")
+
+FightingSection:AddToggle("FightingToggle", {
+    Title = "Ativar Auto Estilos",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoFightingStyle = Value
+    end
+})
+
+local Styles = {
+    "Combat",
+    "Black Leg",
+    "Electro",
+    "Fishman Karate",
+    "Dragon Claw",
+    "Superhuman"
+}
+
+for _, style in pairs(Styles) do
+    FightingSection:AddToggle(style.."Toggle", {
+        Title = "Farmar "..style,
+        Default = true,
+        Callback = function(Value)
+            getgenv()[style.."Farm"] = Value
+        end
+    })
+end
+
+-- Seção BOSSES (todas opções)
+local BossSection = Tabs.Boss:AddSection("Auto Boss")
+
+BossSection:AddToggle("BossToggle", {
+    Title = "Ativar Auto Boss",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoBoss = Value
+    end
+})
+
+local BossList = {
+    "Saber Expert",
+    "Dough King",
+    "Cake Queen",
+    "Don Swan",
+    "Darkbeard"
+}
+
+BossSection:AddDropdown("BossSelect", {
+    Title = "Selecionar Boss",
+    Values = BossList,
+    Default = "Saber Expert",
+    Callback = function(Value)
+        getgenv().SelectedBoss = Value
+    end
+})
+
+-- Ativar a primeira aba
+Window:SelectTab(1)
+
+-- Notificação de inicialização
+Fluent:Notify({
+    Title = "Blox Fruits Ultimate",
+    Content = "Script carregado com todas opções visíveis!",
+    Duration = 5
+})
+
+-- Carregar configurações
+SaveManager:LoadAutoloadConfig()
